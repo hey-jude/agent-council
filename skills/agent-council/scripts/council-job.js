@@ -27,6 +27,7 @@ function detectHostRole() {
   const normalized = SKILL_DIR.replace(/\\/g, '/');
   if (normalized.includes('/.claude/skills/')) return 'claude';
   if (normalized.includes('/.codex/skills/')) return 'codex';
+  if (normalized.includes('/.opencode/skills/')) return 'opencode';
   return 'unknown';
 }
 
@@ -42,6 +43,7 @@ function resolveAutoRole(role, hostRole) {
   const roleLc = String(role || '').trim().toLowerCase();
   if (roleLc && roleLc !== 'auto') return roleLc;
   if (hostRole === 'codex') return 'codex';
+  if (hostRole === 'opencode') return 'opencode';
   if (hostRole === 'claude') return 'claude';
   return 'claude';
 }
@@ -54,6 +56,7 @@ function parseCouncilConfig(configPath) {
         { name: 'claude', command: 'claude -p', emoji: '🧠', color: 'CYAN' },
         { name: 'codex', command: 'codex exec', emoji: '🤖', color: 'BLUE' },
         { name: 'gemini', command: 'gemini', emoji: '💎', color: 'GREEN' },
+        { name: 'opencode', command: 'opencode', emoji: '🟢', color: 'YELLOW' },
       ],
       settings: { exclude_chairman_from_members: true, timeout: 120 },
     },
@@ -254,6 +257,7 @@ function buildCouncilUiPayload(statusPayload) {
     progress: { done, total, overallState: String(statusPayload.overallState || '') },
     codex: { update_plan: { plan: codexPlan } },
     claude: { todo_write: { todos: claudeTodos } },
+    opencode: { todowrite: { todos: claudeTodos } },
   };
 }
 
@@ -353,7 +357,7 @@ function printHelp() {
   process.stdout.write(`Agent Council (job mode)
 
 Usage:
-  council-job.sh start [--config path] [--chairman auto|claude|codex|...] [--jobs-dir path] [--json] "question"
+  council-job.sh start [--config path] [--chairman auto|claude|codex|opencode|...] [--jobs-dir path] [--json] "question"
   council-job.sh status [--json|--text|--checklist] [--verbose] <jobDir>
   council-job.sh wait [--cursor CURSOR] [--bucket auto|N] [--interval-ms N] [--timeout-ms N] <jobDir>
   council-job.sh results [--json] <jobDir>

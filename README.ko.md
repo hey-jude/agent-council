@@ -41,11 +41,12 @@ npx github:team-attention/agent-council
 현재 프로젝트 디렉토리에 스킬 파일들이 복사됩니다.
 Agent Council을 업그레이드한 뒤 `Missing runtime dependency: yaml` 같은 런타임 에러가 나면, 위 설치 커맨드를 한 번 더 실행해서 설치된 스킬 파일을 갱신하세요.
 
-기본값으로 설치 스크립트가 자동으로 Claude Code(`.claude/`) / Codex CLI(`.codex/`) 설치 여부를 감지해서 가능한 타깃에 설치합니다.
+기본값으로 설치 스크립트가 자동으로 Claude Code(`.claude/`) / Codex CLI(`.codex/`) / Opencode(`.opencode/`) 설치 여부를 감지해서 가능한 타깃에 설치합니다.
 
 설치 위치:
 - `.claude/skills/agent-council/` (Claude Code)
 - `.codex/skills/agent-council/` (Codex CLI)
+- `.opencode/skills/agent-council/` (Opencode)
 
 선택사항 (Codex용 레포 스킬로 설치):
 ```bash
@@ -56,9 +57,13 @@ npx github:team-attention/agent-council --target codex
 ```bash
 npx github:team-attention/agent-council --target claude
 npx github:team-attention/agent-council --target both
+# 또는
+npx github:team-attention/agent-council --target opencode
+# 또는
+npx github:team-attention/agent-council --target all
 ```
 
-생성되는 `council.config.yaml`은 감지된 멤버 CLI(claude/codex/gemini 등)만 포함하며, 설치 타깃(호스트)은 members에 포함되지 않도록 처리합니다. 이 필터링은 **초기 생성 시점에만** 적용되며, 이후 편집 내용은 자동으로 정리되지 않습니다.
+생성되는 `council.config.yaml`은 감지된 멤버 CLI(claude/codex/gemini/opencode 등)만 포함하며, 설치 타깃(호스트)은 members에 포함되지 않도록 처리합니다. 이 필터링은 **초기 생성 시점에만** 적용되며, 이후 편집 내용은 자동으로 정리되지 않습니다.
 
 ### 방법 B: Claude Code 플러그인으로 설치 (Claude Code 전용)
 
@@ -74,7 +79,7 @@ npx github:team-attention/agent-council --target both
 
 ### 2. Agent CLI 설치
 
-`council.config.yaml`의 `council.members`에 적힌 CLI를 설치하세요(템플릿 기본 포함: `claude`, `codex`, `gemini`):
+`council.config.yaml`의 `council.members`에 적힌 CLI를 설치하세요(템플릿 기본 포함: `claude`, `codex`, `gemini`, `opencode`):
 
 ```bash
 # Anthropic Claude Code
@@ -85,6 +90,8 @@ npx github:team-attention/agent-council --target both
 
 # Google Gemini CLI
 # https://github.com/google-gemini/gemini-cli
+
+# Opencode 설치는 해당 환경 안내에 따릅니다.
 ```
 
 설치 확인(멤버별):
@@ -92,6 +99,7 @@ npx github:team-attention/agent-council --target both
 command -v claude
 command -v codex
 command -v gemini
+command -v opencode
 ```
 
 ### 3. Council 멤버 설정 (선택사항)
@@ -99,11 +107,12 @@ command -v gemini
 설치된 스킬 폴더의 설정 파일을 편집해서 council을 커스터마이즈:
 - `.claude/skills/agent-council/council.config.yaml`
 - `.codex/skills/agent-council/council.config.yaml`
+- `.opencode/skills/agent-council/council.config.yaml`
 
 ```yaml
 council:
   chairman:
-    role: "auto" # auto|claude|codex|gemini|...
+    role: "auto" # auto|claude|codex|gemini|opencode|...
     # command: "codex exec" # 선택: council.sh에서 Stage 3 종합까지 실행
 
   members:
@@ -116,6 +125,11 @@ council:
       command: "gemini"
       emoji: "💎"
       color: "GREEN"
+
+    - name: opencode
+      command: "opencode"
+      emoji: "🟢"
+      color: "YELLOW"
 
     # 필요에 따라 에이전트 추가
     # - name: grok
@@ -220,4 +234,4 @@ MIT 라이선스 - 자세한 내용은 [LICENSE](./LICENSE) 참조
 ## 크레딧
 
 - [Karpathy의 LLM Council](https://github.com/karpathy/llm-council)에서 영감
-- [Claude Code](https://claude.ai/code) / [Codex CLI](https://github.com/openai/codex) 용으로 제작
+- [Claude Code](https://claude.ai/code) / [Codex CLI](https://github.com/openai/codex) / Opencode 용으로 제작

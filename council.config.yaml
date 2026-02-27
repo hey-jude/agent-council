@@ -27,6 +27,11 @@ council:
       emoji: "💎"
       color: "GREEN"
 
+    - name: opencode
+      command: "opencode"
+      emoji: "🟢"
+      color: "YELLOW"
+
   # Chairman configuration (Claude will act as chairman)
   chairman:
     # role: auto|claude|codex|gemini|...

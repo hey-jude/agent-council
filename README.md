@@ -41,11 +41,12 @@ npx github:team-attention/agent-council
 This copies the skill files to your current project directory.
 If you upgrade Agent Council and hit a runtime error like `Missing runtime dependency: yaml`, re-run the installer command above to refresh your installed skill files.
 
-By default, the installer auto-detects whether to install for Claude Code (`.claude/`) and/or Codex CLI (`.codex/`) based on what’s available on your machine and in the repo.
+By default, the installer auto-detects whether to install for Claude Code (`.claude/`), Codex CLI (`.codex/`), and/or Opencode (`.opencode/`) based on what’s available on your machine and in the repo.
 
 Installed paths:
 - `.claude/skills/agent-council/` (Claude Code)
 - `.codex/skills/agent-council/` (Codex CLI)
+- `.opencode/skills/agent-council/` (Opencode)
 
 Optional (Codex repo skill):
 ```bash
@@ -56,9 +57,13 @@ Other targets:
 ```bash
 npx github:team-attention/agent-council --target claude
 npx github:team-attention/agent-council --target both
+# OR
+npx github:team-attention/agent-council --target opencode
+# OR
+npx github:team-attention/agent-council --target all
 ```
 
-The generated `council.config.yaml` includes only detected member CLIs (e.g. `claude`, `codex`, `gemini`) and avoids adding the host target as a member. This filtering happens only at initial generation; later edits will not auto-remove missing CLIs.
+The generated `council.config.yaml` includes only detected member CLIs (e.g. `claude`, `codex`, `gemini`, `opencode`) and avoids adding the host target as a member. This filtering happens only at initial generation; later edits will not auto-remove missing CLIs.
 
 ### Option B: Install via Claude Code Plugin (Claude Code only)
 
@@ -74,7 +79,7 @@ Note (Plugin installs): **Agent Council requires Node.js**, and Claude Code plug
 
 ### 2. Install Agent CLIs
 
-Install the CLIs listed under `council.members` in your `council.config.yaml` (template includes `claude`, `codex`, `gemini`):
+Install the CLIs listed under `council.members` in your `council.config.yaml` (template includes `claude`, `codex`, `gemini`, `opencode`):
 
 ```bash
 # Anthropic Claude Code
@@ -85,6 +90,8 @@ Install the CLIs listed under `council.members` in your `council.config.yaml` (t
 
 # Google Gemini CLI
 # https://github.com/google-gemini/gemini-cli
+
+# Opencode installation depends on your environment
 ```
 
 Verify each member CLI:
@@ -92,6 +99,7 @@ Verify each member CLI:
 command -v claude
 command -v codex
 command -v gemini
+command -v opencode
 ```
 
 ### 3. Configure Council Members (Optional)
@@ -99,11 +107,12 @@ command -v gemini
 Edit the generated config in your installed skill directory:
 - `.claude/skills/agent-council/council.config.yaml`
 - `.codex/skills/agent-council/council.config.yaml`
+- `.opencode/skills/agent-council/council.config.yaml`
 
 ```yaml
 council:
   chairman:
-    role: "auto" # auto|claude|codex|gemini|...
+    role: "auto" # auto|claude|codex|gemini|opencode|...
     # command: "codex exec" # optional: run Stage 3 inside council.sh
 
   members:
@@ -116,6 +125,11 @@ council:
       command: "gemini"
       emoji: "💎"
       color: "GREEN"
+
+    - name: opencode
+      command: "opencode"
+      emoji: "🟢"
+      color: "YELLOW"
 
     # Add more agents as needed
     # - name: grok
@@ -220,4 +234,4 @@ MIT License - see [LICENSE](./LICENSE) for details.
 ## Credits
 
 - Inspired by [Karpathy's LLM Council](https://github.com/karpathy/llm-council)
-- Built for [Claude Code](https://claude.ai/code) and [Codex CLI](https://github.com/openai/codex)
+- Built for [Claude Code](https://claude.ai/code), [Codex CLI](https://github.com/openai/codex), and Opencode

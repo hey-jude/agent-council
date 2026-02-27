@@ -19,6 +19,10 @@ council:
       command: "gemini"
       emoji: "💎"
       color: "GREEN"
+    - name: opencode
+      command: "opencode"
+      emoji: "🟢"
+      color: "YELLOW"
 ```
 
 Add custom members by appending entries to `members`:

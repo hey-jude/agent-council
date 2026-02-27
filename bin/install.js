@@ -15,6 +15,7 @@ const packageRoot = path.resolve(__dirname, '..');
 const targetDir = process.cwd();
 const claudeDir = path.join(targetDir, '.claude');
 const codexDir = path.join(targetDir, '.codex');
+const opencodeDir = path.join(targetDir, '.opencode');
 const yamlModuleDir = path.dirname(require.resolve('yaml/package.json'));
 
 function parseArgs(argv) {
@@ -25,6 +26,10 @@ function parseArgs(argv) {
   let target = 'auto';
   if (targetIndex !== -1 && args[targetIndex + 1]) {
     target = args[targetIndex + 1];
+  } else if (flags.has('--all') || flags.has('--both')) {
+    target = 'all';
+  } else if (flags.has('--opencode')) {
+    target = 'opencode';
   } else if (flags.has('--both')) {
     target = 'both';
   } else if (flags.has('--codex')) {
@@ -33,8 +38,8 @@ function parseArgs(argv) {
     target = 'claude';
   }
 
-  if (!['auto', 'claude', 'codex', 'both'].includes(target)) {
-    throw new Error(`Invalid --target "${target}". Use auto|claude|codex|both.`);
+  if (!['auto', 'claude', 'codex', 'opencode', 'all', 'both'].includes(target)) {
+    throw new Error(`Invalid --target "${target}". Use auto|claude|codex|opencode|all.`);
   }
 
   return { target };
@@ -82,32 +87,38 @@ try {
     claude: commandExists('claude'),
     codex: commandExists('codex'),
     gemini: commandExists('gemini'),
+    opencode: commandExists('opencode'),
   };
 
   const hasClaudeDir = fs.existsSync(claudeDir);
   const hasCodexDir = fs.existsSync(codexDir);
+  const hasOpencodeDir = fs.existsSync(opencodeDir);
 
   let target = requestedTarget;
   if (requestedTarget === 'auto') {
     const wantClaude = hasClaudeDir || detected.claude;
     const wantCodex = hasCodexDir || detected.codex;
+    const wantOpencode = hasOpencodeDir || detected.opencode;
 
-    if (wantClaude && wantCodex) target = 'both';
-    else if (wantCodex) target = 'codex';
-    else if (wantClaude) target = 'claude';
+    const targets = [];
+    if (wantClaude) targets.push('claude');
+    if (wantCodex) targets.push('codex');
+    if (wantOpencode) targets.push('opencode');
+    if (targets.length === 3) target = 'all';
+    else if (targets.length > 0) target = targets.join(',');
     else target = 'claude';
 
     console.log(`${CYAN}Auto-detected target:${NC} ${target}`);
     if (!wantClaude && !wantCodex) {
       console.log(
-        `${YELLOW}  ⓘ Could not detect Claude Code or Codex CLI; defaulting to "claude". Use --target codex if needed.${NC}`
+        `${YELLOW}  ⓘ Could not detect Claude Code, Codex, or Opencode CLI; defaulting to "claude".${NC}`
       );
     }
     console.log();
   }
 
   const installs = [];
-  if (target === 'claude' || target === 'both') {
+  if (target === 'all' || target === 'both' || target.includes('claude')) {
     installs.push({
       label: 'Claude Code',
       rootDir: claudeDir,
@@ -116,13 +127,22 @@ try {
       hostRole: 'claude',
     });
   }
-  if (target === 'codex' || target === 'both') {
+  if (target === 'all' || target === 'both' || target.includes('codex')) {
     installs.push({
       label: 'Codex CLI',
       rootDir: codexDir,
       skillsDest: path.join(codexDir, 'skills', 'agent-council'),
       displayPath: '.codex/skills/agent-council',
       hostRole: 'codex',
+    });
+  }
+  if (target === 'all' || target === 'both' || target.includes('opencode')) {
+    installs.push({
+      label: 'Opencode',
+      rootDir: opencodeDir,
+      skillsDest: path.join(opencodeDir, 'skills', 'agent-council'),
+      displayPath: '.opencode/skills/agent-council',
+      hostRole: 'opencode',
     });
   }
 
@@ -219,6 +239,12 @@ try {
     console.log(`  "Let's hear opinions from other AIs"`);
     console.log();
   }
+  if (installs.some((i) => i.hostRole === 'opencode')) {
+    console.log(`${CYAN}Usage in Opencode:${NC}`);
+    console.log(`  "Summon the council"`);
+    console.log(`  "Let's hear opinions from other AIs"`);
+    console.log();
+  }
   console.log();
   console.log(`${CYAN}Direct execution:${NC}`);
   if (installs.some((i) => i.hostRole === 'claude')) {
@@ -227,9 +253,12 @@ try {
   if (installs.some((i) => i.hostRole === 'codex')) {
     console.log(`  .codex/skills/agent-council/scripts/council.sh "your question"`);
   }
+  if (installs.some((i) => i.hostRole === 'opencode')) {
+    console.log(`  .opencode/skills/agent-council/scripts/council.sh "your question"`);
+  }
   console.log();
   console.log(`${YELLOW}Note: Only detected CLIs are enabled as members in the generated config.${NC}`);
-  console.log(`${YELLOW}      Detected: claude=${detected.claude} codex=${detected.codex} gemini=${detected.gemini}${NC}`);
+  console.log(`${YELLOW}      Detected: claude=${detected.claude} codex=${detected.codex} gemini=${detected.gemini} opencode=${detected.opencode}${NC}`);
 
 } catch (error) {
   console.error(`${RED}Error during installation: ${error.message}${NC}`);

@@ -73,7 +73,7 @@ in_host_agent_context() {
   fi
 
   case "$SCRIPT_DIR" in
-    */.codex/skills/*|*/.claude/skills/*)
+    */.codex/skills/*|*/.claude/skills/*|*/.opencode/skills/*)
       # Tool-call environments typically do not provide a real TTY on stdout/stderr.
       if [ ! -t 1 ] && [ ! -t 2 ]; then
         return 0
@@ -88,7 +88,7 @@ JOB_DIR="$("$JOB_SCRIPT" start "$@")"
 
 # Host agents (Codex CLI / Claude Code) cannot update native TODO/plan UIs while a long-running
 # command is executing. If we're in a host agent context, return immediately with a single `wait`
-# JSON payload (includes `.ui.codex.update_plan.plan` / `.ui.claude.todo_write.todos`) and let the
+# JSON payload (includes `.ui.codex.update_plan.plan` / `.ui.claude.todo_write.todos` / `.ui.opencode.todowrite.todos`) and let the
 # host agent drive progress updates with repeated short `wait` calls + native UI updates.
 if in_host_agent_context; then
   exec "$JOB_SCRIPT" wait "$JOB_DIR"
