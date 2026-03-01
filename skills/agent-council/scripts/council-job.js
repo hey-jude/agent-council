@@ -56,7 +56,7 @@ function parseCouncilConfig(configPath) {
         { name: 'claude', command: 'claude -p', emoji: '🧠', color: 'CYAN' },
         { name: 'codex', command: 'codex exec', emoji: '🤖', color: 'BLUE' },
         { name: 'gemini', command: 'gemini', emoji: '💎', color: 'GREEN' },
-        { name: 'opencode', command: 'opencode', emoji: '🟢', color: 'YELLOW' },
+        { name: 'opencode', command: 'opencode run', emoji: '🟢', color: 'YELLOW' },
       ],
       settings: { exclude_chairman_from_members: true, timeout: 120 },
     },

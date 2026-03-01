@@ -20,7 +20,7 @@ council:
       emoji: "💎"
       color: "GREEN"
     - name: opencode
-      command: "opencode"
+      command: "opencode run"
       emoji: "🟢"
       color: "YELLOW"
 ```
