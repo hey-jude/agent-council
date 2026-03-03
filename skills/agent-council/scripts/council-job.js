@@ -253,11 +253,35 @@ function buildCouncilUiPayload(statusPayload) {
     },
   ];
 
+  const toOpencodePriority = (status) => {
+    if (status === 'in_progress') return 'high';
+    if (status === 'pending') return 'medium';
+    return 'low';
+  };
+
+  const opencodeTodos = [
+    {
+      content: `[Council] Prompt dispatch`,
+      status: dispatchStatus,
+      priority: toOpencodePriority(dispatchStatus),
+    },
+    ...memberSteps.map((s) => ({
+      content: s.label,
+      status: s.status,
+      priority: toOpencodePriority(s.status),
+    })),
+    {
+      content: `[Council] Synthesize`,
+      status: synthStatus,
+      priority: toOpencodePriority(synthStatus),
+    },
+  ];
+
   return {
     progress: { done, total, overallState: String(statusPayload.overallState || '') },
     codex: { update_plan: { plan: codexPlan } },
     claude: { todo_write: { todos: claudeTodos } },
-    opencode: { todowrite: { todos: claudeTodos } },
+    opencode: { todowrite: { todos: opencodeTodos } },
   };
 }
 
