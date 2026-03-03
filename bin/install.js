@@ -26,19 +26,17 @@ function parseArgs(argv) {
   let target = 'auto';
   if (targetIndex !== -1 && args[targetIndex + 1]) {
     target = args[targetIndex + 1];
-  } else if (flags.has('--all') || flags.has('--both')) {
+  } else if (flags.has('--all')) {
     target = 'all';
   } else if (flags.has('--opencode')) {
     target = 'opencode';
-  } else if (flags.has('--both')) {
-    target = 'both';
   } else if (flags.has('--codex')) {
     target = 'codex';
   } else if (flags.has('--claude')) {
     target = 'claude';
   }
 
-  if (!['auto', 'claude', 'codex', 'opencode', 'all', 'both'].includes(target)) {
+  if (!['auto', 'claude', 'codex', 'opencode', 'all'].includes(target)) {
     throw new Error(`Invalid --target "${target}". Use auto|claude|codex|opencode|all.`);
   }
 
@@ -109,7 +107,7 @@ try {
     else target = 'claude';
 
     console.log(`${CYAN}Auto-detected target:${NC} ${target}`);
-    if (!wantClaude && !wantCodex) {
+    if (!wantClaude && !wantCodex && !wantOpencode) {
       console.log(
         `${YELLOW}  ⓘ Could not detect Claude Code, Codex, or Opencode CLI; defaulting to "claude".${NC}`
       );
@@ -118,7 +116,7 @@ try {
   }
 
   const installs = [];
-  if (target === 'all' || target === 'both' || target.includes('claude')) {
+  if (target === 'all' || target.includes('claude')) {
     installs.push({
       label: 'Claude Code',
       rootDir: claudeDir,
@@ -127,7 +125,7 @@ try {
       hostRole: 'claude',
     });
   }
-  if (target === 'all' || target === 'both' || target.includes('codex')) {
+  if (target === 'all' || target.includes('codex')) {
     installs.push({
       label: 'Codex CLI',
       rootDir: codexDir,
@@ -136,7 +134,7 @@ try {
       hostRole: 'codex',
     });
   }
-  if (target === 'all' || target === 'both' || target.includes('opencode')) {
+  if (target === 'all' || target.includes('opencode')) {
     installs.push({
       label: 'Opencode',
       rootDir: opencodeDir,

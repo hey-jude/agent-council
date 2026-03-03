@@ -56,8 +56,6 @@ npx github:team-attention/agent-council --target codex
 Other targets:
 ```bash
 npx github:team-attention/agent-council --target claude
-npx github:team-attention/agent-council --target both
-# OR
 npx github:team-attention/agent-council --target opencode
 # OR
 npx github:team-attention/agent-council --target all

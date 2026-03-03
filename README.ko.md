@@ -56,8 +56,6 @@ npx github:team-attention/agent-council --target codex
 다른 타깃:
 ```bash
 npx github:team-attention/agent-council --target claude
-npx github:team-attention/agent-council --target both
-# 또는
 npx github:team-attention/agent-council --target opencode
 # 또는
 npx github:team-attention/agent-council --target all
