@@ -89,7 +89,8 @@ Install the CLIs listed under `council.members` in your `council.config.yaml` (t
 # Google Gemini CLI
 # https://github.com/google-gemini/gemini-cli
 
-# Opencode installation depends on your environment
+# Opencode
+# https://github.com/anomalyco/opencode
 ```
 
 Verify each member CLI:
@@ -232,4 +233,4 @@ MIT License - see [LICENSE](./LICENSE) for details.
 ## Credits
 
 - Inspired by [Karpathy's LLM Council](https://github.com/karpathy/llm-council)
-- Built for [Claude Code](https://claude.ai/code), [Codex CLI](https://github.com/openai/codex), and Opencode
+- Built for [Claude Code](https://claude.ai/code), [Codex CLI](https://github.com/openai/codex), and [Opencode](https://github.com/anomalyco/opencode)

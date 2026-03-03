@@ -89,7 +89,8 @@ npx github:team-attention/agent-council --target all
 # Google Gemini CLI
 # https://github.com/google-gemini/gemini-cli
 
-# Opencode 설치는 해당 환경 안내에 따릅니다.
+# Opencode
+# https://github.com/anomalyco/opencode
 ```
 
 설치 확인(멤버별):
@@ -232,4 +233,4 @@ MIT 라이선스 - 자세한 내용은 [LICENSE](./LICENSE) 참조
 ## 크레딧
 
 - [Karpathy의 LLM Council](https://github.com/karpathy/llm-council)에서 영감
-- [Claude Code](https://claude.ai/code) / [Codex CLI](https://github.com/openai/codex) / Opencode 용으로 제작
+- [Claude Code](https://claude.ai/code) / [Codex CLI](https://github.com/openai/codex) / [Opencode](https://github.com/anomalyco/opencode) 용으로 제작
